@@ -1,13 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    // Serve AVIF first (typically 20–50% smaller than WebP), fall back to WebP,
-    // then the original. Next negotiates via the browser's Accept header.
-    formats: ["image/avif", "image/webp"],
-    // Optimized images are content-hashed and immutable; cache them for 31 days
-    // at the edge instead of the 60s default to cut repeat optimization work.
-    minimumCacheTTL: 60 * 60 * 24 * 31,
-    // OMDb poster images (server-fetched metadata; used by MovieShowcase).
+    // Serve images directly instead of through Vercel's on-demand optimizer.
+    // Vercel's Image Optimization quota was exhausted in production, so
+    // /_next/image returned HTTP 402 (X-Vercel-Error:
+    // OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED) for uncached width variants —
+    // which broke images on mobile (its responsive srcset requests widths that
+    // were not pre-cached). `unoptimized` bypasses /_next/image entirely: local
+    // files are served from /public and remote posters straight from the CDN.
+    // Trade-off: no AVIF/WebP conversion or server-side resizing. Revert this
+    // (and rely on the optimizer) only after the Vercel plan/quota is raised.
+    unoptimized: true,
+    // remotePatterns is still required so next/image permits the remote OMDb host.
     // OMDb serves posters from Amazon's media CDN.
     remotePatterns: [
       { protocol: "https", hostname: "m.media-amazon.com", pathname: "/images/**" },
