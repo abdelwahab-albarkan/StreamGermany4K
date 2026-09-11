@@ -3,25 +3,127 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #07080D;
+  --foreground: #C4CAD8;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar (premium dark + cyan accent) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #07080D;
+}
+::-webkit-scrollbar-thumb {
+  background: #232A3D;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00D9FF;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Frosted glass surface used across cards / navbar / menu. */
+  .glass {
+    background: rgba(18, 21, 33, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Cyan → blue → violet gradient clipped to text (for highlighted words). */
+  .text-gradient {
+    background: linear-gradient(135deg, #00D9FF 0%, #3B82F6 50%, #6C63FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Thin gradient divider line at the top of alternating sections. */
+  .section-divider {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(0, 217, 255, 0.5),
+      rgba(108, 99, 255, 0.5),
+      transparent
+    );
+  }
+
+  /* --- Infinite poster marquee (OMDb VOD rows) ---------------------------
+   * The track renders the item list TWICE; translating by -50% therefore
+   * lands exactly on the start of the second copy, so the loop is seamless
+   * (no jump/gap/snap). Spacing lives in each item's padding (not a flex
+   * gap) so both halves are pixel-identical. Duration is set inline per row. */
+  .marquee-viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .marquee-left {
+    animation-name: marquee-left;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .marquee-right {
+    animation-name: marquee-right;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  /* Pause on hover / keyboard focus within the row. */
+  .marquee-viewport:hover .marquee-track,
+  .marquee-viewport:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+/* Reduced motion: stop the marquee and let the row scroll manually instead. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .marquee-viewport {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* Respect users who prefer reduced motion (accessibility). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

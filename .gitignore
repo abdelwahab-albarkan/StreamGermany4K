@@ -25,11 +25,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
+# env files (never commit real credentials; .env.example is the only tracked one)
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
+
+# local development / agent config (not part of the app)
+/.claude/
 
 # typescript
 *.tsbuildinfo
