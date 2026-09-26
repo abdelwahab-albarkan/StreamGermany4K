@@ -25,11 +25,10 @@ function getCountryFromHeaders(req: NextRequest): string | null {
     }
   }
 
-  // Next.js geo object if provided by platform
-  // @ts-expect-error - req.geo is available on Vercel/Edge runtimes
-  if (req.geo && typeof req.geo.country === "string" && req.geo.country.length === 2) {
-    // @ts-expect-error - req.geo is available on Vercel/Edge runtimes
-    return req.geo.country.toUpperCase();
+  // Next.js geo object if provided by hosting platform
+  const geoCountry = req.geo?.country;
+  if (typeof geoCountry === "string" && geoCountry.length === 2 && geoCountry !== "XX" && geoCountry !== "T1") {
+    return geoCountry.toUpperCase();
   }
 
   return null;
