@@ -1,41 +1,44 @@
-import { SITE, stat } from "@/lib/site";
-
 /**
- * Single source of truth for the subscription packages, reused by /preise, the
- * homepage pricing preview and (as reference values) the comparison table.
- * Packages are period-based: the title is the duration, the price is the total
- * for that period. Content claims (Sender/VOD) route through the SITE.stats
- * fallback so no figures are invented.
+ * Single source of truth for the subscription packages, reused by the homepage
+ * pricing section, /preise, the /order flow and the comparison table.
+ *
+ * Prices are shown in USD ($). Each plan has a stable `id` used as the /order
+ * query parameter (?plan=<id>). Features are qualitative facts already used
+ * across the site — no invented channel/VOD counts, uptime, device limits,
+ * support tiers or activation claims.
  */
 export interface Plan {
-  title: string; // period, e.g. "3 Monate"
-  price: string; // total price for the period, e.g. "40"
-  duration?: string; // optional extra label under the price (omitted for period packages)
+  id: PlanId; // stable id, used as ?plan= value
+  title: string; // German duration label, e.g. "3 Monate"
+  price: string; // numeric total for the period; rendered with a leading "$"
+  duration?: string; // optional extra label under the price
   features: string[];
-  isPopular?: boolean; // highlighted card
-  badge?: string; // badge text (defaults to "Beliebt" in the card)
+  isPopular?: boolean;
+  badge?: string;
 }
 
+export type PlanId = "3-months" | "6-months" | "1-year";
+
+/** Currency symbol — kept here so no component hard-codes it. */
+export const CURRENCY = "$";
+
+// Shared, honest feature list (the plans differ only by duration/price).
+const FEATURES = [
+  "Live-TV, Sport, Filme & Serien",
+  "Auf vielen Geräten nutzbar",
+  "HD- & 4K-Qualität (je nach Inhalt)",
+  "Persönlicher Support bei der Einrichtung",
+];
+
 export function getPlans(): Plan[] {
-  const channels = SITE.stats.channels ? `${SITE.stats.channels} Live-Sender` : "Grosse Auswahl an Live-Sendern";
-  const vod = SITE.stats.vod ? `${SITE.stats.vod} Filme & Serien` : "Umfangreiche Film- & Serienmediathek";
   return [
-    {
-      title: "3 Monate",
-      price: "40",
-      features: [channels, vod, "HD- & SD-Qualität", "1 Gerät gleichzeitig", "Standard-Support", "Anti-Ruckel-Technologie"],
-    },
-    {
-      title: "6 Monate",
-      price: "55",
-      features: [channels, vod, "4K, FHD, HD & SD", "2 Geräte gleichzeitig", `${stat(SITE.stats.support, "Premium")}-Support`, "Anti-Ruckel-Technologie", "Catch-up TV (7 Tage)"],
-    },
-    {
-      title: "1 Jahr",
-      price: "80",
-      isPopular: true,
-      badge: "Bestes Angebot",
-      features: [channels, vod, "4K, FHD, HD & SD", "3 Geräte gleichzeitig", "VIP-Priority-Support", "Anti-Ruckel-Technologie", "Catch-up TV (7 Tage)", "Kostenlose Updates"],
-    },
+    { id: "3-months", title: "3 Monate", price: "30", features: FEATURES },
+    { id: "6-months", title: "6 Monate", price: "50", features: FEATURES },
+    { id: "1-year", title: "1 Jahr", price: "70", features: FEATURES },
   ];
+}
+
+/** Look up a plan by id; returns undefined for unknown/invalid ids. */
+export function getPlanById(id?: string | null): Plan | undefined {
+  return getPlans().find((p) => p.id === id);
 }

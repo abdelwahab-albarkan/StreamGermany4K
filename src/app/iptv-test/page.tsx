@@ -113,7 +113,7 @@ export default function IptvTestPage() {
         primaryLabel="Preise ansehen"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

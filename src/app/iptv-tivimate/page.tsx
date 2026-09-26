@@ -130,7 +130,7 @@ export default function TivimatePage() {
         primaryLabel="Tarife ansehen"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

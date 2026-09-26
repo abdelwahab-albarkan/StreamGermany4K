@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronRight } from "lucide-react";
-import { WhatsAppButton } from "@/components/ui/WhatsApp";
 import { Logo } from "@/components/ui/Logo";
 import { NAV_LINKS } from "@/lib/site";
 
@@ -58,7 +57,12 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <WhatsAppButton label="Anfragen" className="px-4 text-sm" />
+            <Link
+              href="/order"
+              className="inline-flex items-center justify-center rounded-lg bg-brand-gradient px-5 h-10 text-sm font-semibold text-white shadow-glow-cyan hover:brightness-110 transition-all"
+            >
+              Jetzt bestellen
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -100,7 +104,13 @@ export function Navbar() {
                 ))}
               </nav>
               <div className="p-4 border-t border-white/10">
-                <WhatsAppButton label="Auf WhatsApp schreiben" className="w-full" />
+                <Link
+                  href="/order"
+                  onClick={closeMenu}
+                  className="inline-flex w-full items-center justify-center rounded-lg bg-brand-gradient h-11 px-6 text-base font-semibold text-white hover:brightness-110 transition-all"
+                >
+                  Jetzt bestellen
+                </Link>
               </div>
             </div>
           </div>

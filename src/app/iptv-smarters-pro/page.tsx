@@ -124,7 +124,7 @@ export default function SmartersProPage() {
         primaryLabel="Preise vergleichen"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

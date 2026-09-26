@@ -138,7 +138,7 @@ export default function KodiAddonsPage() {
         primaryLabel="Preise & Laufzeiten"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

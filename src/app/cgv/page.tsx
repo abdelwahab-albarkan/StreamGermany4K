@@ -35,7 +35,7 @@ export default function CgvPage() {
 
       <h2>3. Preise &amp; Zahlungsbedingungen</h2>
       <p>
-        Alle angegebenen Preise verstehen sich in Euro (EUR) inklusive der gesetzlichen Umsatzsteuer. Die zur Verfügung stehenden Zahlungsarten werden im Bestellprozess angezeigt.
+        Alle angegebenen Preise verstehen sich in US-Dollar (USD). Die zur Verfügung stehenden Zahlungsarten werden im Bestellprozess angezeigt.
       </p>
 
       <h2>4. Bereitstellung der Zugangsdaten</h2>

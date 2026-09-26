@@ -2,37 +2,35 @@ import React from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsApp";
-import { whatsappUrl } from "@/lib/site";
+import { CURRENCY } from "@/lib/pricing";
 
 interface PricingCardProps {
   title: string;
-  price: string; // total for the period, e.g. "40"
+  price: string; // total for the period, e.g. "30"
+  planId?: string; // when set, the CTA opens /order/?plan=<planId>
   duration?: string; // optional label under the price (omit for period packages)
   features: string[];
   isPopular?: boolean;
   badge?: string; // defaults to "Beliebt"
   ctaLabel?: string;
-  ctaHref?: string; // defaults to the central WhatsApp URL (orders go via WhatsApp)
+  ctaHref?: string; // overrides the default /order link
 }
 
 export function PricingCard({
   title,
   price,
+  planId,
   duration,
   features,
   isPopular,
   badge,
-  ctaLabel = "Jetzt anfragen",
+  ctaLabel = "Jetzt bestellen",
   ctaHref,
 }: PricingCardProps) {
-  // Default CTA opens WhatsApp with THIS pack's details pre-filled, so the order
-  // chat starts with the selected plan, price and included features already typed.
-  const packMessage =
-    `Hallo StreamGermany4K, ich möchte das Paket „${title}" bestellen.\n` +
-    `Preis: ${price} €${duration ? ` / ${duration}` : ""}` +
-    (features.length ? `\nEnthalten:\n- ${features.join("\n- ")}` : "") +
-    `\n\nBitte senden Sie mir die Infos zu Zahlung und Einrichtung.`;
-  const resolvedHref = ctaHref ?? whatsappUrl(packMessage);
+  // Commercial CTA routes through the dedicated order page (never straight to
+  // WhatsApp), carrying the selected plan as a query parameter so it is
+  // preselected there.
+  const resolvedHref = ctaHref ?? (planId ? `/order?plan=${planId}` : "/order");
   const isExternal = resolvedHref.startsWith("http");
   const isWhatsApp = resolvedHref.includes("wa.me");
   const btnClasses = `inline-flex w-full items-center justify-center gap-2 rounded-md h-12 px-8 text-lg font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark ${
@@ -65,7 +63,7 @@ export function PricingCard({
       <div className="mb-8 text-center">
         <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
         <div className="flex items-end justify-center gap-1">
-          <span className="text-4xl font-extrabold text-white">{price} €</span>
+          <span className="text-4xl font-extrabold text-white">{CURRENCY}{price}</span>
           {duration && <span className="text-brand-text mb-1">/ {duration}</span>}
         </div>
       </div>

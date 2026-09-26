@@ -125,7 +125,7 @@ export default function AndroidTvPage() {
         primaryLabel="Preise & Tarife"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

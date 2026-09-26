@@ -5,6 +5,7 @@ import { Faq } from "@/components/sections/Faq";
 import { Cta } from "@/components/sections/Cta";
 import { pageMetadata } from "@/lib/seo";
 import { SITE, stat } from "@/lib/site";
+import { getPlans, CURRENCY } from "@/lib/pricing";
 
 export const metadata = pageMetadata({
   title: "IPTV Vergleich 2026: Anbieter, Angebote und Tarife gegenüberstellen",
@@ -16,9 +17,10 @@ export const metadata = pageMetadata({
 // Row = comparison dimension; values per plan. Prices/durations/connections are
 // plan definitions; content claims (Sender/VOD) route through the stats fallback.
 const senderRow = SITE.stats.channels ? `${SITE.stats.channels} Sender` : "Grosse Senderauswahl";
+const plans = getPlans(); // central pricing (no duplicated price values)
 const rows: { label: string; basic: string | boolean; premium: string | boolean; ultimate: string | boolean }[] = [
-  { label: "Preis", basic: "40 €", premium: "55 €", ultimate: "80 €" },
-  { label: "Laufzeit", basic: "3 Monate", premium: "6 Monate", ultimate: "12 Monate" },
+  { label: "Preis", basic: `${CURRENCY}${plans[0].price}`, premium: `${CURRENCY}${plans[1].price}`, ultimate: `${CURRENCY}${plans[2].price}` },
+  { label: "Laufzeit", basic: plans[0].title, premium: plans[1].title, ultimate: plans[2].title },
   { label: "Live-Sender", basic: senderRow, premium: senderRow, ultimate: senderRow },
   { label: "Bildqualität", basic: "HD & SD", premium: "bis 4K", ultimate: "bis 4K" },
   { label: "Parallele Geräte", basic: "1", premium: "2", ultimate: "3" },
@@ -90,11 +92,9 @@ export default function IptvVergleichPage() {
             <thead>
               <tr className="border-b border-brand-gray">
                 <th className="py-4 pr-4 font-semibold text-brand-text">Merkmal</th>
-                <th className="py-4 px-4 font-bold text-white text-center">3 Monate</th>
-                <th className="py-4 px-4 font-bold text-white text-center">6 Monate</th>
-                <th className="py-4 px-4 font-bold text-white text-center">
-                  1 Jahr <span className="text-brand-accent text-xs align-middle whitespace-nowrap">★ Bestes Angebot</span>
-                </th>
+                <th className="py-4 px-4 font-bold text-white text-center">{plans[0].title}</th>
+                <th className="py-4 px-4 font-bold text-white text-center">{plans[1].title}</th>
+                <th className="py-4 px-4 font-bold text-white text-center">{plans[2].title}</th>
               </tr>
             </thead>
             <tbody>
@@ -150,7 +150,7 @@ export default function IptvVergleichPage() {
         primaryLabel="Preise ansehen"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

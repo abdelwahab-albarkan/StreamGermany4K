@@ -133,7 +133,7 @@ export default function IptvFireTvStickPage() {
         heading="Fire TV Stick startklar machen"
         text="Holen Sie sich Ihre Zugangsdaten und streamen Sie in wenigen Minuten auf dem Fire TV Stick."
         primaryLabel="IPTV kaufen"
-        primaryHref="/iptv-kaufen"
+        primaryHref="/order"
         secondaryLabel="Preise ansehen"
         secondaryHref="/preise"
       />

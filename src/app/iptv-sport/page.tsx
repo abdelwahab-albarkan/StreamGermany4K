@@ -116,7 +116,7 @@ export default function IptvSportPage() {
         primaryLabel="Preise ansehen"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

@@ -99,7 +99,7 @@ export default function M3uXtreamEpgPage() {
         heading="Zugangsdaten erhalten und loslegen"
         text="M3U oder Xtream – Ihre Zugangsdaten bekommen Sie beim Kauf. Danach ist alles in Minuten eingerichtet."
         primaryLabel="IPTV kaufen"
-        primaryHref="/iptv-kaufen"
+        primaryHref="/order"
         secondaryLabel="Geräte &amp; Einrichtung"
         secondaryHref="/geraete"
       />

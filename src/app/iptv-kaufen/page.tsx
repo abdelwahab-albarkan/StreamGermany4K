@@ -103,9 +103,11 @@ export default function IptvKaufenPage() {
 
       <Cta
         heading="Bereit loszulegen?"
-        text="Wählen Sie Ihre Laufzeit und sichern Sie sich Premium-IPTV in 4K bei StreamGermany4K."
-        primaryLabel="Preise &amp; Abo wählen"
-        primaryHref="/preise"
+        text="Wählen Sie Ihr Paket und senden Sie Ihre Bestellung in wenigen Schritten über WhatsApp."
+        primaryLabel="Jetzt bestellen"
+        primaryHref="/order"
+        secondaryLabel="Preise ansehen"
+        secondaryHref="/preise"
       />
     </div>
   );

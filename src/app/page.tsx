@@ -417,8 +417,8 @@ export default function Home() {
             </div>
           </div>
           <div className="text-center mt-10">
-            <Link href="/iptv-kaufen" className="inline-flex h-12 items-center justify-center rounded-lg bg-brand-gradient px-8 text-lg font-semibold text-white shadow-[0_0_20px_rgba(0,217,255,0.25)] hover:brightness-110 transition-all">
-              Jetzt starten
+            <Link href="/order" className="inline-flex h-12 items-center justify-center rounded-lg bg-brand-gradient px-8 text-lg font-semibold text-white shadow-[0_0_20px_rgba(0,217,255,0.25)] hover:brightness-110 transition-all">
+              Jetzt bestellen
             </Link>
           </div>
         </div>
@@ -485,12 +485,12 @@ export default function Home() {
             className="mb-14"
             eyebrow="Preise"
             icon={Wallet}
-            title={<>Transparente <span className="text-gradient">Preise &amp; Abos</span></>}
+            title={<>Transparente <span className="text-gradient">Preise &amp; Pakete</span></>}
             subtitle="Wählen Sie die Laufzeit, die zu Ihrer Nutzung passt – ohne versteckte Gebühren."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-10">
             {plans.map((plan) => (
-              <PricingCard key={plan.title} title={plan.title} price={plan.price} duration={plan.duration} features={plan.features} isPopular={plan.isPopular} badge={plan.badge} />
+              <PricingCard key={plan.id} title={plan.title} price={plan.price} planId={plan.id} duration={plan.duration} features={plan.features} isPopular={plan.isPopular} badge={plan.badge} />
             ))}
           </div>
           <PaymentMethods />
@@ -508,10 +508,10 @@ export default function Home() {
       {/* 15) Final CTA */}
       <Cta
         heading="Bereit für ein besseres Streaming-Erlebnis?"
-        text="Sehen Sie sich die Pakete an oder folgen Sie der Einrichtung – in wenigen Minuten sind Sie startklar."
-        primaryLabel="Pakete ansehen"
-        primaryHref="/preise"
-        secondaryLabel="Installation ansehen"
+        text="Bestellen Sie in wenigen Schritten oder sehen Sie sich vorab die Einrichtung an."
+        primaryLabel="Jetzt bestellen"
+        primaryHref="/order"
+        secondaryLabel="Einrichtung ansehen"
         secondaryHref="/iptv-kaufen"
       />
     </div>

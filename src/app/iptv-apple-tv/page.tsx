@@ -141,7 +141,7 @@ export default function AppleTvPage() {
         primaryLabel="Preise & Abos"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

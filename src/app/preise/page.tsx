@@ -8,9 +8,9 @@ import { PaymentMethods } from "@/components/ui/PaymentMethods";
 import Link from "next/link";
 
 export const metadata = pageMetadata({
-  title: "IPTV Preise: Kosten, Abos und Laufzeiten im Überblick",
+  title: "IPTV Preise: Kosten und Pakete im Überblick",
   description:
-    "Was kostet IPTV? Transparente Preise und Laufzeiten bei StreamGermany4K – vom Monatsabo bis zum Jahresabo. Kosten, Leistungen und Zahlung verständlich erklärt.",
+    "Was kostet IPTV? Transparente Preise bei StreamGermany4K – drei Laufzeiten zur Auswahl. Leistungen und Zahlung verständlich erklärt.",
   path: "/preise",
 });
 
@@ -18,19 +18,19 @@ export const metadata = pageMetadata({
 const faq = [
   {
     q: "Was kostet IPTV bei StreamGermany4K?",
-    a: "Die Kosten hängen von der Laufzeit ab: Je länger das Abo, desto günstiger der Preis pro Monat. Ein Monatszugang eignet sich zum Ausprobieren, ein Jahresabo ist auf Dauer am wirtschaftlichsten. Die aktuellen Preise finden Sie in den Tarifkarten oben.",
+    a: "Es gibt drei Laufzeiten – 3 Monate, 6 Monate und 1 Jahr. Die aktuellen Preise sehen Sie in den Tarifkarten oben; sie werden transparent angezeigt, ohne versteckte Gebühren.",
   },
   {
-    q: "Gibt es versteckte Gebühren oder einen Vertrag mit Mindestlaufzeit?",
+    q: "Gibt es versteckte Gebühren oder eine automatische Verlängerung?",
     a: "Nein. Sie zahlen den ausgewiesenen Preis für die gewählte Laufzeit. Es gibt keine automatische Vertragsbindung darüber hinaus – nach Ablauf entscheiden Sie neu, ob Sie verlängern möchten.",
   },
   {
-    q: "Lohnt sich das Monatsabo oder das Jahresabo mehr?",
-    a: "Das Monatsabo bietet maximale Flexibilität und niedrige Einstiegskosten. Das Jahresabo hat den niedrigsten Preis pro Monat und lohnt sich, wenn Sie IPTV dauerhaft nutzen möchten.",
+    q: "Welche Laufzeit lohnt sich?",
+    a: "Eine kürzere Laufzeit bietet mehr Flexibilität, eine längere Laufzeit den besten Preis pro Monat. Wählen Sie die Option, die zu Ihrer Nutzung passt.",
   },
   {
-    q: "Wie kann ich bezahlen?",
-    a: "Die verfügbaren Zahlungsarten werden Ihnen beim Kauf angezeigt. Den Ablauf von Bestellung, Zahlung und Freischaltung beschreiben wir auf der Seite „IPTV kaufen“.",
+    q: "Wie bestelle ich?",
+    a: "Auf der Bestellseite wählen Sie Paket, App-Option und Zahlungsmethode und senden Ihre Anfrage anschließend direkt über WhatsApp. Die nächsten Schritte erhalten Sie im Chat.",
   },
 ];
 
@@ -43,7 +43,7 @@ export default function PreisePage() {
 
         <div className="text-center mb-16 animate-slide-up">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            IPTV Preise &amp; <span className="text-brand-accent">Abos</span>
+            IPTV Preise &amp; <span className="text-brand-accent">Pakete</span>
           </h1>
           <p className="text-xl text-brand-text max-w-2xl mx-auto">
             Transparente Kosten, klare Laufzeiten, keine versteckten Gebühren. Wählen Sie die Laufzeit,
@@ -54,9 +54,10 @@ export default function PreisePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan) => (
             <PricingCard
-              key={plan.title}
+              key={plan.id}
               title={plan.title}
               price={plan.price}
+              planId={plan.id}
               duration={plan.duration}
               features={plan.features}
               isPopular={plan.isPopular}
@@ -74,21 +75,19 @@ export default function PreisePage() {
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Was den IPTV-Preis bestimmt</h2>
           <div className="space-y-4 text-brand-text leading-relaxed">
             <p>
-              Der Preis für IPTV richtet sich vor allem nach der Laufzeit und dem Leistungsumfang. Längere
-              Laufzeiten senken den Preis pro Monat spürbar, während ein kurzes Abo mehr Flexibilität bietet.
-              Auch die Anzahl der parallel nutzbaren Geräte und die maximale Bildqualität (bis 4K) fliessen
-              in die Tarifwahl ein.
+              Der Preis für IPTV richtet sich vor allem nach der Laufzeit und dem Leistungsumfang. Eine
+              längere Laufzeit senkt den Preis pro Monat, während eine kürzere Laufzeit mehr Flexibilität
+              bietet. Auch Bildqualität (bis 4K) und die unterstützten Geräte fliessen in die Wahl ein.
             </p>
             <p>
-              Achten Sie bei jedem Angebot nicht nur auf den reinen Preis, sondern auf das Gesamtpaket aus
-              Qualität, Stabilität und Support. Worauf es dabei ankommt, erklären wir im{" "}
+              Achten Sie nicht nur auf den reinen Preis, sondern auf das Gesamtpaket aus Qualität,
+              Stabilität und Support. Worauf es dabei ankommt, erklären wir im{" "}
               <Link href="/iptv-anbieter" className="text-brand-accent hover:underline">Anbieter-Ratgeber</Link>;
-              die Tarife stellen wir im{" "}
-              <Link href="/iptv-vergleich" className="text-brand-accent hover:underline">IPTV-Vergleich</Link>{" "}
-              direkt gegenüber.
-              Wenn Sie sich entschieden haben, führt Sie die Seite{" "}
-              <Link href="/iptv-kaufen" className="text-brand-accent hover:underline">IPTV kaufen</Link>{" "}
-              durch Bestellung und Einrichtung.
+              einen strukturierten Überblick gibt der{" "}
+              <Link href="/iptv-vergleich" className="text-brand-accent hover:underline">IPTV-Vergleich</Link>.
+              Wenn Sie sich entschieden haben, führt Sie die{" "}
+              <Link href="/order" className="text-brand-accent hover:underline">Bestellseite</Link>{" "}
+              durch die nächsten Schritte.
             </p>
           </div>
         </div>
@@ -100,7 +99,7 @@ export default function PreisePage() {
         heading="Passendes Abo gefunden?"
         text="Schliessen Sie in wenigen Schritten ab und richten Sie StreamGermany4K auf Ihrem Gerät ein."
         primaryLabel="IPTV kaufen"
-        primaryHref="/iptv-kaufen"
+        primaryHref="/order"
         secondaryLabel="Anbieter-Ratgeber"
         secondaryHref="/iptv-anbieter"
       />

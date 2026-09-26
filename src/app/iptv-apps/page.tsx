@@ -121,7 +121,7 @@ export default function IptvAppsPage() {
         primaryLabel="IPTV Vergleich"
         primaryHref="/iptv-vergleich"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

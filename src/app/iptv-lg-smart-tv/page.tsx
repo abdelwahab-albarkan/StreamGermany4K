@@ -142,7 +142,7 @@ export default function LgSmartTvPage() {
         primaryLabel="Preise & Laufzeiten"
         primaryHref="/preise"
         secondaryLabel="IPTV kaufen"
-        secondaryHref="/iptv-kaufen"
+        secondaryHref="/order"
       />
     </div>
   );

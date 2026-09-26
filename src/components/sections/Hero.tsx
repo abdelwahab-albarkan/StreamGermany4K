@@ -44,10 +44,10 @@ export async function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-10">
-            <Link href="/iptv-kaufen">
+            <Link href="/order">
               <Button size="lg" className="w-full sm:w-auto gap-2">
                 <Play className="w-5 h-5 fill-current" />
-                Jetzt IPTV entdecken
+                Jetzt bestellen
               </Button>
             </Link>
             <Link href="/preise">

@@ -129,7 +129,7 @@ export default function IptvSamsungPage() {
         heading="Samsung TV startklar machen"
         text="Holen Sie sich Ihre Zugangsdaten und richten Sie StreamGermany4K auf Ihrem Samsung Smart TV ein."
         primaryLabel="IPTV kaufen"
-        primaryHref="/iptv-kaufen"
+        primaryHref="/order"
         secondaryLabel="Preise ansehen"
         secondaryHref="/preise"
       />
