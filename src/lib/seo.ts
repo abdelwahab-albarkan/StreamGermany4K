@@ -1,65 +1,91 @@
 import type { Metadata } from "next";
 import { SITE } from "@/lib/site";
+import { type Locale, getAlternateUrl } from "@/i18n/config";
 
 /**
- * Default social-share image (self-hosted). Page-level `openGraph`/`twitter`
- * blocks fully replace the layout defaults, so they must re-declare the image.
+ * Default social-share image (self-hosted).
  */
-const OG_IMAGE = {
+const getOgImage = (locale: Locale) => ({
   url: "/images/iptv-deutschland-hero.jpg",
   width: 1344,
   height: 768,
-  alt: "StreamGermany4K – Premium IPTV in 4K für Deutschland",
-};
+  alt:
+    locale === "en"
+      ? "StreamGermany4K – Premium 4K IPTV for Germany"
+      : "StreamGermany4K – Premium IPTV in 4K für Deutschland",
+});
 
 /**
  * Metadata builder for indexable SEO pages (home, commercial, informational).
- * - Sets a self-referencing canonical on the production domain (via metadataBase).
- * - German OpenGraph + Twitter defaults.
- * - Indexable by default; pass `index: false` for exceptions.
+ * - Sets a self-referencing canonical on the production domain.
+ * - Sets bidirectional hreflang alternate links (de, en, x-default).
+ * - Localized OpenGraph + Twitter defaults.
  */
 export function pageMetadata(spec: {
   title: string;
   description: string;
-  path: string; // e.g. "/iptv-anbieter" ("/" for home)
+  path: string; // e.g. "/iptv-anbieter" or "/en/iptv-providers"
+  locale?: Locale;
   keywords?: string[] | string;
   index?: boolean;
 }): Metadata {
+  const locale: Locale = spec.locale ?? (spec.path.startsWith("/en") ? "en" : "de");
   const index = spec.index ?? true;
+  const ogImage = getOgImage(locale);
+
+  // Derive German and English URLs for hreflang
+  const dePath = getAlternateUrl(spec.path, "de");
+  const enPath = getAlternateUrl(spec.path, "en");
+
+  const languages = index
+    ? {
+        de: dePath,
+        en: enPath,
+        "x-default": dePath,
+      }
+    : undefined;
+
   return {
     title: spec.title,
     description: spec.description,
     keywords: spec.keywords,
-    alternates: { canonical: spec.path },
+    alternates: {
+      canonical: spec.path,
+      ...(languages ? { languages } : {}),
+    },
     robots: { index, follow: true },
     openGraph: {
       title: spec.title,
       description: spec.description,
       url: spec.path,
       siteName: SITE.name,
-      locale: SITE.locale,
+      locale: locale === "en" ? "en_US" : "de_DE",
       type: "website",
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: spec.title,
       description: spec.description,
-      images: [OG_IMAGE.url],
+      images: [ogImage.url],
     },
   };
 }
 
 /**
- * Metadata builder for legal/policy pages.
- * - Canonical on the production domain.
- * - noindex (legal pages are not SEO landing pages) but follow.
+ * Metadata builder for legal/policy and utility pages (e.g. /order).
+ * - Canonical on the current URL.
+ * - noindex, follow.
  */
 export function legalMetadata(spec: {
   title: string;
   description: string;
-  path: string; // e.g. "/impressum"
+  path: string;
+  locale?: Locale;
 }): Metadata {
+  const locale: Locale = spec.locale ?? (spec.path.startsWith("/en") ? "en" : "de");
+  const ogImage = getOgImage(locale);
+
   return {
     title: spec.title,
     description: spec.description,
@@ -70,9 +96,15 @@ export function legalMetadata(spec: {
       description: spec.description,
       url: spec.path,
       siteName: SITE.name,
-      locale: SITE.locale,
+      locale: locale === "en" ? "en_US" : "de_DE",
       type: "website",
-      images: [OG_IMAGE],
+      images: [ogImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: spec.title,
+      description: spec.description,
+      images: [ogImage.url],
     },
   };
 }

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { CookieBanner } from "@/components/ui/CookieBanner";
 import { SITE } from "@/lib/site";
 import { JsonLd, organizationSchema, websiteSchema } from "@/lib/jsonld";
 import { WhatsAppButton } from "@/components/ui/WhatsApp";
@@ -18,7 +19,14 @@ export const metadata: Metadata = {
   description:
     "StreamGermany4K ist Ihr Premium-IPTV-Dienst für Deutschland: Live-TV, Sport und Filme in 4K/HD auf allen Geräten. Anbieter vergleichen, Abo verstehen und kaufen.",
   applicationName: SITE.name,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: {
+      de: "/",
+      en: "/en",
+      "x-default": "/",
+    },
+  },
   openGraph: {
     type: "website",
     locale: SITE.locale,
@@ -52,6 +60,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />
+        <CookieBanner />
         {/* Site-wide floating WhatsApp click-to-chat button */}
         <WhatsAppButton floating />
       </body>

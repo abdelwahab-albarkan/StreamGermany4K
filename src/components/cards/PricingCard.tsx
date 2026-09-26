@@ -3,17 +3,20 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsApp";
 import { CURRENCY } from "@/lib/pricing";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n";
 
 interface PricingCardProps {
   title: string;
   price: string; // total for the period, e.g. "30"
-  planId?: string; // when set, the CTA opens /order/?plan=<planId>
-  duration?: string; // optional label under the price (omit for period packages)
+  planId?: string; // when set, the CTA opens /order?plan=<planId> or /en/order?plan=<planId>
+  duration?: string; // optional label under the price
   features: string[];
   isPopular?: boolean;
-  badge?: string; // defaults to "Beliebt"
+  badge?: string;
   ctaLabel?: string;
   ctaHref?: string; // overrides the default /order link
+  locale?: Locale;
 }
 
 export function PricingCard({
@@ -24,15 +27,17 @@ export function PricingCard({
   features,
   isPopular,
   badge,
-  ctaLabel = "Jetzt bestellen",
+  ctaLabel,
   ctaHref,
+  locale = "de",
 }: PricingCardProps) {
-  // Commercial CTA routes through the dedicated order page (never straight to
-  // WhatsApp), carrying the selected plan as a query parameter so it is
-  // preselected there.
-  const resolvedHref = ctaHref ?? (planId ? `/order?plan=${planId}` : "/order");
+  const dict = getDictionary(locale);
+  const defaultLabel = ctaLabel ?? dict.pricing.orderCta;
+  const defaultBaseOrder = locale === "en" ? "/en/order" : "/order";
+  const resolvedHref = ctaHref ?? (planId ? `${defaultBaseOrder}?plan=${planId}` : defaultBaseOrder);
   const isExternal = resolvedHref.startsWith("http");
   const isWhatsApp = resolvedHref.includes("wa.me");
+
   const btnClasses = `inline-flex w-full items-center justify-center gap-2 rounded-md h-12 px-8 text-lg font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark ${
     isPopular
       ? "bg-brand-accent text-white hover:bg-brand-accentHover shadow-[0_0_15px_rgba(0, 217, 255,0.4)]"
@@ -42,7 +47,7 @@ export function PricingCard({
   const cta = (
     <>
       {isWhatsApp && <WhatsAppIcon className="w-5 h-5" />}
-      {ctaLabel}
+      {defaultLabel}
     </>
   );
 
@@ -56,14 +61,17 @@ export function PricingCard({
     >
       {isPopular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-accent text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-          {badge ?? "Beliebt"}
+          {badge ?? (locale === "en" ? "Popular" : "Beliebt")}
         </div>
       )}
 
       <div className="mb-8 text-center">
         <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
         <div className="flex items-end justify-center gap-1">
-          <span className="text-4xl font-extrabold text-white">{CURRENCY}{price}</span>
+          <span className="text-4xl font-extrabold text-white">
+            {CURRENCY}
+            {price}
+          </span>
           {duration && <span className="text-brand-text mb-1">/ {duration}</span>}
         </div>
       </div>
@@ -81,9 +89,13 @@ export function PricingCard({
 
       <div className="mt-auto">
         {isExternal ? (
-          <a href={resolvedHref} target="_blank" rel="noopener noreferrer" className={btnClasses}>{cta}</a>
+          <a href={resolvedHref} target="_blank" rel="noopener noreferrer" className={btnClasses}>
+            {cta}
+          </a>
         ) : (
-          <Link href={resolvedHref} className={btnClasses}>{cta}</Link>
+          <Link href={resolvedHref} className={btnClasses}>
+            {cta}
+          </Link>
         )}
       </div>
     </div>

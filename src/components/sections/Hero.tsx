@@ -4,17 +4,18 @@ import Link from "next/link";
 import { Button } from "../ui/Button";
 import { Play, MonitorSmartphone, Wallet, Headphones, Film, Star } from "lucide-react";
 import { getHomepageMovies, type VodTitle } from "@/lib/omdb";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n";
 
 /**
- * Premium two-column hero. Left: badge + single H1 (primary intent
- * "IPTV Deutschland") + copy + CTAs + factual trust points. Right: a cinematic
- * trio of real movie posters from OMDb (reuses the cached homepage movie data —
- * no extra API calls). Falls back to a clean editorial tile when the catalog is
- * unavailable. No invented figures.
+ * Premium two-column hero.
  */
-export async function Hero() {
+export async function Hero({ locale = "de" }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
   const movies = await getHomepageMovies();
   const posters = movies.filter((m) => m.posterUrl).slice(0, 3);
+  const orderHref = locale === "en" ? "/en/order" : "/order";
+  const pricingHref = locale === "en" ? "/en/pricing" : "/preise";
 
   return (
     <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28">
@@ -29,59 +30,54 @@ export async function Hero() {
         <div className="animate-fade-in">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-accent/30 bg-brand-accent/10 px-4 py-1.5 text-sm font-medium text-brand-accent mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />
-            IPTV Deutschland
+            {dict.hero.badge}
           </span>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6">
-            IPTV in Deutschland für modernes{" "}
-            <span className="text-gradient">Streaming in 4K</span>
+            {dict.hero.titleStart}
+            <span className="text-gradient">{dict.hero.titleGradient}</span>
           </h1>
 
           <p className="text-lg md:text-xl text-brand-text leading-relaxed mb-8 max-w-xl">
-            StreamGermany4K bringt Live-TV, Sport sowie eine grosse Auswahl an Filmen und Serien
-            in 4K- und HD-Qualität auf jedes Gerät. Vergleichen Sie in Ruhe, verstehen Sie Ihr
-            Abo und starten Sie unkompliziert.
+            {dict.hero.subtitle}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-10">
-            <Link href="/order">
+            <Link href={orderHref}>
               <Button size="lg" className="w-full sm:w-auto gap-2">
                 <Play className="w-5 h-5 fill-current" />
-                Jetzt bestellen
+                {dict.hero.orderCta}
               </Button>
             </Link>
-            <Link href="/preise">
+            <Link href={pricingHref}>
               <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                Preise ansehen
+                {dict.hero.pricingCta}
               </Button>
             </Link>
           </div>
 
-          {/* Factual, qualitative trust points (no invented statistics) */}
+          {/* Factual, qualitative trust points */}
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-brand-text">
             <li className="flex items-center gap-2">
-              <Wallet className="w-4 h-4 text-brand-accent" /> Flexible Laufzeiten
+              <Wallet className="w-4 h-4 text-brand-accent" /> {dict.hero.trustPoints[0]}
             </li>
             <li className="flex items-center gap-2">
-              <MonitorSmartphone className="w-4 h-4 text-brand-accent" /> Viele Geräte unterstützt
+              <MonitorSmartphone className="w-4 h-4 text-brand-accent" /> {dict.hero.trustPoints[1]}
             </li>
             <li className="flex items-center gap-2">
-              <Headphones className="w-4 h-4 text-brand-accent" /> Deutscher Support
+              <Headphones className="w-4 h-4 text-brand-accent" /> {dict.hero.trustPoints[2]}
             </li>
           </ul>
         </div>
 
         {/* Right: cinematic movie-poster showcase */}
         <div className="relative animate-fade-in">
-          {/* gradient glow frame */}
           <div className="absolute -inset-2 bg-brand-gradient opacity-20 blur-2xl rounded-3xl" aria-hidden="true" />
           <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-brand-card/50 shadow-2xl shadow-black/50 p-6 sm:p-8">
-            {/* decorative ambient inside the card */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-cyan/[0.06] to-brand-violet/[0.06]" aria-hidden="true" />
 
-            {/* 4K badge */}
             <div className="absolute top-4 right-4 z-20 inline-flex items-center rounded-md bg-black/60 backdrop-blur-sm px-2 py-1 text-xs font-semibold text-white border border-white/10">
-              4K HDR
+              {dict.hero.badge4k}
             </div>
 
             {posters.length > 0 ? (
@@ -92,20 +88,17 @@ export async function Hero() {
                   ))}
                 </div>
                 <div className="relative mt-6 text-center">
-                  <p className="text-white font-semibold">Filme &amp; Serien in 4K</p>
-                  <p className="text-brand-text text-sm">Grosse Auswahl an Filmen und Serien auf Abruf</p>
+                  <p className="text-white font-semibold">{dict.hero.moviesTitle}</p>
+                  <p className="text-brand-text text-sm">{dict.hero.moviesSubtitle}</p>
                 </div>
               </>
             ) : (
-              // Fallback tile when the catalog preview is unavailable (no OMDb key).
               <div className="relative flex flex-col items-center justify-center text-center gap-3 py-16">
                 <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-glow-cyan">
                   <Film className="w-7 h-7 text-white" />
                 </div>
-                <p className="text-white font-semibold text-lg">Filme &amp; Serien in 4K</p>
-                <p className="text-brand-text text-sm max-w-xs">
-                  Grosse Auswahl an Filmen und Serien – bequem auf Abruf, auf jedem Gerät.
-                </p>
+                <p className="text-white font-semibold text-lg">{dict.hero.moviesTitle}</p>
+                <p className="text-brand-text text-sm max-w-xs">{dict.hero.moviesSubtitle}</p>
               </div>
             )}
           </div>
@@ -115,7 +108,6 @@ export async function Hero() {
   );
 }
 
-/** One poster in the hero trio. Middle poster is raised, glows, and shows its IMDb rating. */
 function HeroPoster({ item, featured, priority }: { item: VodTitle; featured?: boolean; priority?: boolean }) {
   return (
     <div
@@ -129,7 +121,7 @@ function HeroPoster({ item, featured, priority }: { item: VodTitle; featured?: b
         {item.posterUrl && (
           <Image
             src={item.posterUrl}
-            alt={`${item.title} – Film`}
+            alt={item.title}
             fill
             priority={priority}
             sizes="(max-width: 1024px) 30vw, 200px"

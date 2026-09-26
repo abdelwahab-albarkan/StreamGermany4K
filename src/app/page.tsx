@@ -181,6 +181,31 @@ export default function Home() {
       {/* 3) Filme & Serien (OMDb, graceful fallback) */}
       <MovieShowcase />
 
+      {/* Pricing preview + payment methods */}
+      <section className="py-24 bg-brand-dark relative">
+        <Divider />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            className="mb-14"
+            eyebrow="Preise"
+            icon={Wallet}
+            title={<>Transparente <span className="text-gradient">Preise &amp; Pakete</span></>}
+            subtitle="Wählen Sie die Laufzeit, die zu Ihrer Nutzung passt – ohne versteckte Gebühren."
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-10">
+            {plans.map((plan) => (
+              <PricingCard key={plan.id} title={plan.title} price={plan.price} planId={plan.id} duration={plan.duration} features={plan.features} isPopular={plan.isPopular} badge={plan.badge} />
+            ))}
+          </div>
+          <PaymentMethods />
+          <div className="text-center mt-8">
+            <Link href="/preise" className="inline-flex items-center gap-1 text-brand-accent hover:gap-2 transition-all font-medium">
+              Alle Details zu Preisen &amp; Laufzeiten <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 4) Alles an einem Ort — entertainment categories */}
       <section className="py-24 bg-brand-dark relative">
         <Divider />
@@ -476,31 +501,6 @@ export default function Home() {
 
       {/* 12) Reviews (real reviews from lib/reviews.ts; honest empty-state otherwise) */}
       <Reviews />
-
-      {/* 13) Pricing preview + payment methods */}
-      <section className="py-24 bg-brand-dark relative">
-        <Divider />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            className="mb-14"
-            eyebrow="Preise"
-            icon={Wallet}
-            title={<>Transparente <span className="text-gradient">Preise &amp; Pakete</span></>}
-            subtitle="Wählen Sie die Laufzeit, die zu Ihrer Nutzung passt – ohne versteckte Gebühren."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-10">
-            {plans.map((plan) => (
-              <PricingCard key={plan.id} title={plan.title} price={plan.price} planId={plan.id} duration={plan.duration} features={plan.features} isPopular={plan.isPopular} badge={plan.badge} />
-            ))}
-          </div>
-          <PaymentMethods />
-          <div className="text-center mt-8">
-            <Link href="/preise" className="inline-flex items-center gap-1 text-brand-accent hover:gap-2 transition-all font-medium">
-              Alle Details zu Preisen &amp; Laufzeiten <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* 14) FAQ (with FAQPage JSON-LD) */}
       <Faq items={faq} heading="Häufige Fragen zu IPTV" />

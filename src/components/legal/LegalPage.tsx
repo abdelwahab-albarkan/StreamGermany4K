@@ -1,12 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
-
-/**
- * Shared presentational scaffold for legal/policy pages. Reuses the site's
- * existing dark theme + brand tokens (no separate design system). The content
- * is French, so the wrapper is marked lang="fr" inside the English document.
- */
+import type { Locale } from "@/i18n/config";
 
 const prose =
   "max-w-3xl mx-auto break-words " +
@@ -25,26 +20,34 @@ export function LegalPage({
   title,
   intro,
   updated,
+  locale = "de",
   children,
 }: {
   title: string;
   intro?: string;
   updated?: string;
+  locale?: Locale;
   children: React.ReactNode;
 }) {
+  const isEn = locale === "en";
+  const homeHref = isEn ? "/en" : "/";
+  const eyebrow = isEn ? "Legal Information" : "Rechtliche Informationen";
+  const updatedLabel = isEn ? "Last updated" : "Letzte Aktualisierung";
+  const backLabel = isEn ? "← Back to Home" : "← Zurück zur Startseite";
+
   return (
-    <div lang="de" className="bg-brand-dark min-h-screen">
+    <div lang={locale} className="bg-brand-dark min-h-screen">
       <header className="border-b border-brand-gray/60 bg-[#0f0f0f]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <p className="text-brand-accent font-semibold uppercase tracking-widest text-xs mb-3">
-            Rechtliche Informationen
+            {eyebrow}
           </p>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight text-balance">
             {title}
           </h1>
           {intro && <p className="text-brand-text mt-4 max-w-2xl leading-relaxed">{intro}</p>}
           {updated && (
-            <p className="text-brand-text/60 text-sm mt-4">Letzte Aktualisierung: {updated}</p>
+            <p className="text-brand-text/60 text-sm mt-4">{updatedLabel}: {updated}</p>
           )}
         </div>
       </header>
@@ -53,8 +56,8 @@ export function LegalPage({
         <article className={prose}>{children}</article>
 
         <div className="max-w-3xl mx-auto mt-12 pt-8 border-t border-brand-gray/50">
-          <Link href="/" className="text-brand-accent hover:text-brand-accentHover text-sm font-medium">
-            ← Zurück zur Startseite
+          <Link href={homeHref} className="text-brand-accent hover:text-brand-accentHover text-sm font-medium">
+            {backLabel}
           </Link>
         </div>
       </div>
@@ -62,7 +65,7 @@ export function LegalPage({
   );
 }
 
-/** Highlighted placeholder token the operator must complete. Impossible to mistake for real data. */
+/** Highlighted placeholder token */
 export function PH({ children }: { children: React.ReactNode }) {
   return (
     <span className="font-mono text-sm font-semibold text-brand-accent bg-brand-accent/10 border border-dashed border-brand-accent/50 rounded px-1.5 py-0.5 break-words">
@@ -71,7 +74,7 @@ export function PH({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Flag box for information requiring completion or professional legal review. */
+/** Flag box for information requiring completion */
 export function LegalNote({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="my-8 rounded-xl border border-brand-accent/30 border-l-4 border-l-brand-accent bg-brand-accent/[0.06] p-5 sm:p-6">

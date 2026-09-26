@@ -8,11 +8,20 @@ export interface Crumb {
 }
 
 /** Visible breadcrumb trail + matching BreadcrumbList JSON-LD. */
-export function Breadcrumbs({ items }: { items: Crumb[] }) {
+export function Breadcrumbs({
+  items,
+  ariaLabel,
+}: {
+  items: Crumb[];
+  ariaLabel?: string;
+}) {
+  const isEn = items[0]?.path.startsWith("/en");
+  const label = ariaLabel ?? (isEn ? "Breadcrumbs" : "Brotkrümelnavigation");
+
   return (
     <>
       <JsonLd data={breadcrumbSchema(items)} />
-      <nav aria-label="Brotkrümelnavigation" className="mb-8">
+      <nav aria-label={label} className="mb-8">
         <ol className="flex flex-wrap items-center gap-1 text-sm text-brand-text">
           {items.map((item, i) => {
             const isLast = i === items.length - 1;

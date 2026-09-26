@@ -1,15 +1,17 @@
 import { PAYMENT_METHODS } from "@/lib/payments";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n";
 
 /**
  * "Sichere Zahlung" trust strip. Each brand logo sits on a white chip so it stays
- * clearly visible on the dark background (many payment marks are dark/coloured).
- * Uses plain <img> because the source filenames contain special characters and
- * these are tiny, below-fold, decorative trust marks.
+ * clearly visible on the dark background.
  */
-export function PaymentMethods() {
+export function PaymentMethods({ locale = "de" }: { locale?: Locale }) {
+  const dict = getDictionary(locale);
+
   return (
     <div className="glass rounded-2xl border border-brand-gray/50 px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-x-6 gap-y-4 text-center max-w-3xl mx-auto">
-      <span className="text-brand-text text-sm">Sichere Zahlung – gängige Zahlungsarten:</span>
+      <span className="text-brand-text text-sm">{dict.pricing.securePayment}</span>
       <div className="flex items-center gap-3 flex-wrap justify-center">
         {PAYMENT_METHODS.map((m) => (
           <span key={m.alt} className="inline-flex items-center justify-center h-10 w-16 rounded-lg bg-white px-2 shadow-sm">

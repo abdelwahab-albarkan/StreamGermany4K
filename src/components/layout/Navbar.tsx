@@ -2,13 +2,23 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { NAV_LINKS } from "@/lib/site";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { getNavLinks } from "@/lib/site";
+import { getLocaleFromPath } from "@/i18n/config";
+import { getDictionary } from "@/i18n";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname() || "/";
+  const locale = getLocaleFromPath(pathname);
+  const dict = getDictionary(locale);
+  const navLinks = getNavLinks(locale);
+  const homeHref = locale === "en" ? "/en" : "/";
+  const orderHref = locale === "en" ? "/en/order" : "/order";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -42,13 +52,18 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center gap-4">
-          <Link href="/" aria-label="StreamGermany4K – Startseite" className="flex items-center shrink-0" onClick={closeMenu}>
+          <Link
+            href={homeHref}
+            aria-label={`${dict.siteName} – ${dict.nav.home}`}
+            className="flex items-center shrink-0"
+            onClick={closeMenu}
+          >
             <Logo priority className="h-8 sm:h-10 w-auto" />
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -57,24 +72,31 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Language Switcher */}
+            <LanguageSwitcher variant="desktop" />
+
             <Link
-              href="/order"
+              href={orderHref}
               className="inline-flex items-center justify-center rounded-lg bg-brand-gradient px-5 h-10 text-sm font-semibold text-white shadow-glow-cyan hover:brightness-110 transition-all"
             >
-              Jetzt bestellen
+              {dict.nav.orderCta}
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsMobileMenuOpen((o) => !o)}
-            className="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-brand-surface/60 text-white hover:border-brand-accent/50 hover:text-brand-accent active:scale-95 transition-all"
-            aria-label={isMobileMenuOpen ? "Menü schließen" : "Menü öffnen"}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Mobile menu button + language switcher */}
+          <div className="flex lg:hidden items-center gap-2">
+            <LanguageSwitcher variant="desktop" />
+            <button
+              onClick={() => setIsMobileMenuOpen((o) => !o)}
+              className="inline-flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-brand-surface/60 text-white hover:border-brand-accent/50 hover:text-brand-accent active:scale-95 transition-all"
+              aria-label={isMobileMenuOpen ? dict.nav.menuClose : dict.nav.menuOpen}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -90,13 +112,18 @@ export function Navbar() {
           />
           <div id="mobile-menu" className="lg:hidden absolute top-full inset-x-0 z-50 px-4 pt-3 animate-fade-in">
             <div className="rounded-2xl border border-white/10 bg-brand-darker/95 backdrop-blur-xl shadow-2xl shadow-black/60 overflow-hidden">
+              {/* Language switcher inside mobile menu */}
+              <div className="p-4 border-b border-white/10">
+                <LanguageSwitcher variant="mobile" onSelect={closeMenu} />
+              </div>
+
               <nav className="p-2" aria-label="Mobile">
-                {NAV_LINKS.map((link) => (
+                {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={closeMenu}
-                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-white text-base font-medium hover:bg-brand-surface hover:text-brand-accent active:bg-brand-surface transition-colors"
+                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-white text-base font-medium hover:bg-brand-surface hover:text-brand-accent active:bg-brand-surface transition-colors min-h-[44px]"
                   >
                     <span>{link.label}</span>
                     <ChevronRight className="w-4 h-4 text-brand-muted" />
@@ -105,11 +132,11 @@ export function Navbar() {
               </nav>
               <div className="p-4 border-t border-white/10">
                 <Link
-                  href="/order"
+                  href={orderHref}
                   onClick={closeMenu}
-                  className="inline-flex w-full items-center justify-center rounded-lg bg-brand-gradient h-11 px-6 text-base font-semibold text-white hover:brightness-110 transition-all"
+                  className="inline-flex w-full items-center justify-center rounded-lg bg-brand-gradient h-11 px-6 text-base font-semibold text-white hover:brightness-110 transition-all min-h-[44px]"
                 >
-                  Jetzt bestellen
+                  {dict.nav.orderCta}
                 </Link>
               </div>
             </div>

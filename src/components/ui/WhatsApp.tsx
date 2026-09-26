@@ -1,4 +1,8 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/site";
+import { getLocaleFromPath, type Locale } from "@/i18n/config";
 
 /** Official WhatsApp glyph as inline SVG (no external dependency, sharp at any size). */
 export function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -11,27 +15,36 @@ export function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) 
 
 /**
  * WhatsApp click-to-chat button. `floating` renders the fixed bottom-right FAB
- * (site-wide); otherwise an inline WhatsApp-green pill. Uses the central number
- * from SITE.whatsapp so the URL is never malformed or duplicated.
+ * (site-wide); otherwise an inline WhatsApp-green pill.
  */
 export function WhatsAppButton({
-  label = "Auf WhatsApp schreiben",
+  label,
   floating = false,
   className = "",
+  locale: propLocale,
 }: {
   label?: string;
   floating?: boolean;
   className?: string;
+  locale?: Locale;
 }) {
-  const common = "text-white font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark";
+  const pathname = usePathname() || "/";
+  const locale = propLocale ?? getLocaleFromPath(pathname);
+  const isEn = locale === "en";
+
+  const defaultLabel = label ?? (isEn ? "Chat on WhatsApp" : "Auf WhatsApp schreiben");
+  const targetUrl = isEn ? SITE.whatsapp.urlEn : SITE.whatsapp.url;
+
+  const common =
+    "text-white font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark";
 
   if (floating) {
     return (
       <a
-        href={SITE.whatsapp.url}
+        href={targetUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={label}
+        aria-label={defaultLabel}
         className={`fixed bottom-5 right-5 z-40 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#1ebe57] shadow-lg shadow-[#25D366]/30 hover:scale-105 active:scale-95 ${common} ${className}`}
       >
         <WhatsAppIcon className="w-7 h-7" />
@@ -41,13 +54,13 @@ export function WhatsAppButton({
 
   return (
     <a
-      href={SITE.whatsapp.url}
+      href={targetUrl}
       target="_blank"
       rel="noopener noreferrer"
       className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#25D366] hover:bg-[#1ebe57] px-5 h-11 ${common} ${className}`}
     >
       <WhatsAppIcon className="w-5 h-5" />
-      {label}
+      {defaultLabel}
     </a>
   );
 }

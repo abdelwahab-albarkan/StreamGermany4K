@@ -1,23 +1,21 @@
+import { Locale } from "@/i18n/config";
+
 /**
  * Blog article registry. Metadata only — each article's body lives in its own
  * page.tsx with bespoke content (no templated filler). Used by the /blog index,
  * the sitemap and related-article links.
- *
- * `date` is a stable publication date (not regenerated), so we never fabricate
- * "freshness". Bump it only on a real content update.
- * `cover` is a self-hosted editorial image in /public/images.
  */
 export interface BlogPost {
   slug: string;
-  title: string; // list/card title (H1 may differ)
+  title: string;
   description: string;
   excerpt: string;
-  date: string; // ISO, e.g. "2026-09-09"
-  cover: string; // /images/...
+  date: string;
+  cover: string;
   coverAlt: string;
 }
 
-export const BLOG_POSTS: BlogPost[] = [
+export const BLOG_POSTS_DE: BlogPost[] = [
   {
     slug: "was-ist-iptv",
     title: "Was ist IPTV? Einfach erklärt",
@@ -70,4 +68,66 @@ export const BLOG_POSTS: BlogPost[] = [
   },
 ];
 
-export const getPost = (slug: string) => BLOG_POSTS.find((p) => p.slug === slug);
+export const BLOG_POSTS_EN: BlogPost[] = [
+  {
+    slug: "was-ist-iptv",
+    title: "What is IPTV? Simply Explained",
+    description:
+      "What is IPTV and how does it work? A clear guide to live TV over the internet – including benefits, requirements, and comparison with cable & satellite.",
+    excerpt: "Watch television over high-speed internet instead of cable or satellite – how IPTV works and what you need.",
+    date: "2026-09-09",
+    cover: "/images/wie-funktioniert-iptv.jpg",
+    coverAlt: "Illustration: How IPTV streaming over the internet works",
+  },
+  {
+    slug: "iptv-ruckelt",
+    title: "IPTV Buffering or Freezing? Causes & Fixes",
+    description:
+      "Is IPTV buffering, freezing, or not playing? Discover the most common causes and a step-by-step troubleshooting guide for broadband, apps, and devices.",
+    excerpt: "Buffering, stuttering, or black screens? Follow our step-by-step diagnostic guide to restore smooth streaming.",
+    date: "2026-09-09",
+    cover: "/images/iptv-ohne-buffering-illustration.jpg",
+    coverAlt: "IPTV without buffering – smooth streaming setup",
+  },
+  {
+    slug: "m3u-xtream-epg",
+    title: "M3U, Xtream Codes & EPG Explained",
+    description:
+      "Understand M3U playlists, Xtream Codes API, and EPG guides: what they mean, how they relate, and which login method is best for your setup.",
+    excerpt: "What M3U playlists, Xtream Codes, and electronic TV guides mean – and how to set them up easily.",
+    date: "2026-09-09",
+    cover: "/images/iptv-streaming-technologie.jpg",
+    coverAlt: "IPTV streaming technology: M3U, Xtream Codes, and EPG",
+  },
+  {
+    slug: "iptv-einrichten",
+    title: "Step-by-Step IPTV Setup Guide (2026)",
+    description:
+      "Setting up IPTV made easy: Step-by-step tutorial for Smart TVs, Fire TV Sticks, Android, and Apple TV – from M3U URL to full live television.",
+    excerpt: "Complete setup guide: Install IPTV apps and configure your access credentials in minutes on any device.",
+    date: "2026-09-09",
+    cover: "/images/iptv-installation-anleitung.jpg",
+    coverAlt: "IPTV installation and setup step by step",
+  },
+  {
+    slug: "waipu-tv-magenta-tv-alternative",
+    title: "Waipu.tv & MagentaTV Alternatives: IPTV Comparison 2026",
+    description:
+      "Looking for a high-performance alternative to traditional German TV providers? Discover the pros and cons of IPTV regarding 4K quality, channel breadth, and flexibility.",
+    excerpt: "Traditional providers vs independent IPTV – channel lineup, 4K quality, device flexibility, and cost overview.",
+    date: "2026-09-09",
+    cover: "/images/iptv-vergleich-editorial.jpg",
+    coverAlt: "IPTV provider comparison – editorial overview",
+  },
+];
+
+export const BLOG_POSTS = BLOG_POSTS_DE;
+
+export function getBlogPosts(locale: Locale = "de"): BlogPost[] {
+  return locale === "en" ? BLOG_POSTS_EN : BLOG_POSTS_DE;
+}
+
+export function getPost(slug: string, locale: Locale = "de"): BlogPost | undefined {
+  const posts = getBlogPosts(locale);
+  return posts.find((p) => p.slug === slug);
+}
