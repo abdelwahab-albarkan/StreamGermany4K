@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { getAlternateUrl, getLocaleFromPath, setLocaleCookie } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 
@@ -14,9 +14,15 @@ export function LanguageSwitcher({
   onSelect?: () => void;
 }) {
   const pathname = usePathname() || "/";
-  const searchParams = useSearchParams();
-  const search = searchParams?.toString();
-  const fullPath = search ? `${pathname}?${search}` : pathname;
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSearch(window.location.search || "");
+    }
+  }, [pathname]);
+
+  const fullPath = search ? `${pathname}${search}` : pathname;
   const currentLocale = getLocaleFromPath(pathname);
   const dict = getDictionary(currentLocale);
 
