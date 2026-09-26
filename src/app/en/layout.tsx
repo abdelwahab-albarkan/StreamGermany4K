@@ -1,4 +1,5 @@
 import React from "react";
+import { HtmlLangHandler } from "@/components/ui/HtmlLangHandler";
 
 export default function EnglishLayout({
   children,
@@ -6,7 +7,8 @@ export default function EnglishLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div lang="en" className="contents">
+    <div lang="en-GB" className="contents">
+      <HtmlLangHandler lang="en-GB" />
       {children}
     </div>
   );

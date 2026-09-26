@@ -2,6 +2,7 @@ export type Locale = "de" | "en";
 
 export const DEFAULT_LOCALE: Locale = "de";
 export const LOCALES: Locale[] = ["de", "en"];
+export const LOCALE_COOKIE = "user_locale";
 
 /**
  * Bidirectional mapping between German URLs (default, root) and English URLs (/en/...).
@@ -46,6 +47,26 @@ export function getLocaleFromPath(pathname: string): Locale {
     return "en";
   }
   return "de";
+}
+
+/**
+ * Sets the user's manual language selection in a persistent cookie.
+ */
+export function setLocaleCookie(locale: Locale): void {
+  if (typeof document === "undefined") return;
+  document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+}
+
+/**
+ * Retrieves the stored user language preference from cookie if present.
+ */
+export function getLocaleCookie(): Locale | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${LOCALE_COOKIE}=([^;]*)`));
+  if (match && (match[1] === "de" || match[1] === "en")) {
+    return match[1] as Locale;
+  }
+  return null;
 }
 
 /**

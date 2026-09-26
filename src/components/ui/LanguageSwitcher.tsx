@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { getAlternateUrl, getLocaleFromPath, type Locale } from "@/i18n/config";
+import { getAlternateUrl, getLocaleFromPath, setLocaleCookie } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 
 export function LanguageSwitcher({
@@ -23,6 +23,13 @@ export function LanguageSwitcher({
   const deHref = getAlternateUrl(fullPath, "de");
   const enHref = getAlternateUrl(fullPath, "en");
 
+  const handleSelect = (locale: "de" | "en") => {
+    setLocaleCookie(locale);
+    if (onSelect) {
+      onSelect();
+    }
+  };
+
   if (variant === "mobile") {
     return (
       <div
@@ -32,7 +39,7 @@ export function LanguageSwitcher({
       >
         <Link
           href={deHref}
-          onClick={onSelect}
+          onClick={() => handleSelect("de")}
           aria-current={currentLocale === "de" ? "true" : undefined}
           className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all min-h-[44px] ${
             currentLocale === "de"
@@ -45,7 +52,7 @@ export function LanguageSwitcher({
         </Link>
         <Link
           href={enHref}
-          onClick={onSelect}
+          onClick={() => handleSelect("en")}
           aria-current={currentLocale === "en" ? "true" : undefined}
           className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all min-h-[44px] ${
             currentLocale === "en"
@@ -69,6 +76,7 @@ export function LanguageSwitcher({
     >
       <Link
         href={deHref}
+        onClick={() => handleSelect("de")}
         aria-current={currentLocale === "de" ? "true" : undefined}
         title="Deutsch"
         className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all ${
@@ -82,6 +90,7 @@ export function LanguageSwitcher({
       </Link>
       <Link
         href={enHref}
+        onClick={() => handleSelect("en")}
         aria-current={currentLocale === "en" ? "true" : undefined}
         title="English"
         className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all ${
