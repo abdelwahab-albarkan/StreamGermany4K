@@ -89,11 +89,13 @@ export function getAlternateUrl(currentPathWithSearch: string, targetLocale: Loc
     if (pair) {
       return `${pair.en}${query}`;
     }
-    // Blog subpage handling
+    // Blog article slugs exist under both locales by convention (/blog/x <-> /en/blog/x).
     if (normalized.startsWith("/blog/")) {
       return `/en${normalized}${query}`;
     }
-    return `/en${normalized}${query}`;
+    // Unknown German route with no English equivalent: fall back to the English
+    // homepage rather than fabricating a /en/<slug> that may not exist.
+    return "/en";
   } else {
     // Target is German (de)
     if (normalized === "/en") {
@@ -106,9 +108,12 @@ export function getAlternateUrl(currentPathWithSearch: string, targetLocale: Loc
     if (normalized.startsWith("/en/blog/")) {
       return `${normalized.replace("/en/blog/", "/blog/")}${query}`;
     }
+    // Unknown English route with no German equivalent: fall back to the German
+    // homepage rather than stripping "/en" into a /<slug> that may not exist.
     if (normalized.startsWith("/en/")) {
-      return `${normalized.replace("/en/", "/")}${query}`;
+      return "/";
     }
+    // Already a German route (or the German homepage).
     return `${normalized}${query}`;
   }
 }
