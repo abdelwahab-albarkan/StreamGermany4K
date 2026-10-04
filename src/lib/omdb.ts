@@ -20,7 +20,11 @@ import { MOVIE_IDS, SERIES_IDS } from "@/lib/omdb-titles";
  */
 
 const OMDB_BASE = "https://www.omdbapi.com/";
-const REVALIDATE_SECONDS = 3600; // 1 hour
+// The curated title list is effectively static (ratings drift very slowly), so a
+// 24h revalidate keeps the homepage statically cached far longer and makes the
+// background ISR regeneration — the only time an OMDb call sits in the render
+// path — 24× rarer, removing almost all cold-navigation spikes.
+const REVALIDATE_SECONDS = 86400; // 24 hours
 
 /** Normalised title used by the homepage VOD marquee (source-agnostic). */
 export interface VodTitle {

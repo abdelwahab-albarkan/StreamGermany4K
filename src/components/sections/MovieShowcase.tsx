@@ -114,6 +114,43 @@ export async function MovieShowcase({ locale = "de" }: { locale?: Locale }) {
   );
 }
 
+/**
+ * Same-shape placeholder for the showcase, shown only while the OMDb-backed
+ * section streams in (e.g. during a background ISR regeneration). Reserves
+ * comparable vertical space so the stream-in causes no significant layout shift.
+ */
+export function MovieShowcaseSkeleton({ locale = "de" }: { locale?: Locale }) {
+  const isEn = locale === "en";
+  return (
+    <section className="relative py-24 overflow-hidden" aria-hidden="true">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 max-w-2xl">
+          <p className="text-brand-accent text-sm font-semibold tracking-[0.2em] uppercase mb-3">Entertainment</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            {isEn ? "Movies & " : "Filme & "}
+            <span className="text-gradient">{isEn ? "Series" : "Serien"}</span>
+          </h2>
+        </div>
+        <div className="space-y-12">
+          {[0, 1].map((row) => (
+            <div key={row}>
+              <div className="h-6 w-48 rounded bg-white/10 mb-5 animate-pulse" />
+              <div className="flex gap-4 sm:gap-5 overflow-hidden">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="shrink-0 w-[132px] sm:w-[156px] md:w-[172px] lg:w-[184px] aspect-[2/3] rounded-xl bg-white/5 border border-white/10 animate-pulse"
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function MarqueeRow({
   title,
   kind,

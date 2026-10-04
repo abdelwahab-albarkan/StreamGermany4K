@@ -1,19 +1,24 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/Button";
 import { Play, MonitorSmartphone, Wallet, Headphones, Film, Star } from "lucide-react";
 import { getHomepageMovies, type VodTitle } from "@/lib/omdb";
 import type { Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n";
+import { getDictionary, type Dictionary } from "@/i18n";
 
 /**
  * Premium two-column hero.
+ *
+ * The component itself is synchronous so the above-the-fold copy, CTAs and the
+ * poster card shell render (and stream) immediately. Only the OMDb-backed poster
+ * cluster is awaited, inside a <Suspense> boundary with a same-size skeleton — so
+ * a cold OMDb fetch during ISR regeneration never blocks the whole page (and, by
+ * extension, a language switch to a homepage). The skeleton matches the final
+ * dimensions, so there is no layout shift.
  */
-export async function Hero({ locale = "de" }: { locale?: Locale }) {
+export function Hero({ locale = "de" }: { locale?: Locale }) {
   const dict = getDictionary(locale);
-  const movies = await getHomepageMovies();
-  const posters = movies.filter((m) => m.posterUrl).slice(0, 3);
   const orderHref = locale === "en" ? "/en/order" : "/order";
   const pricingHref = locale === "en" ? "/en/pricing" : "/preise";
 
@@ -80,31 +85,68 @@ export async function Hero({ locale = "de" }: { locale?: Locale }) {
               {dict.hero.badge4k}
             </div>
 
-            {posters.length > 0 ? (
-              <>
-                <div className="relative flex items-end justify-center gap-3 sm:gap-4">
-                  {posters.map((p, i) => (
-                    <HeroPoster key={p.id} item={p} featured={i === 1} priority />
-                  ))}
-                </div>
-                <div className="relative mt-6 text-center">
-                  <p className="text-white font-semibold">{dict.hero.moviesTitle}</p>
-                  <p className="text-brand-text text-sm">{dict.hero.moviesSubtitle}</p>
-                </div>
-              </>
-            ) : (
-              <div className="relative flex flex-col items-center justify-center text-center gap-3 py-16">
-                <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-glow-cyan">
-                  <Film className="w-7 h-7 text-white" />
-                </div>
-                <p className="text-white font-semibold text-lg">{dict.hero.moviesTitle}</p>
-                <p className="text-brand-text text-sm max-w-xs">{dict.hero.moviesSubtitle}</p>
-              </div>
-            )}
+            <Suspense fallback={<HeroPostersSkeleton dict={dict} />}>
+              <HeroPosters dict={dict} />
+            </Suspense>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+/** Async poster cluster — the only part of the hero that awaits OMDb. */
+async function HeroPosters({ dict }: { dict: Dictionary }) {
+  const movies = await getHomepageMovies();
+  const posters = movies.filter((m) => m.posterUrl).slice(0, 3);
+
+  if (posters.length === 0) {
+    return (
+      <div className="relative flex flex-col items-center justify-center text-center gap-3 py-16">
+        <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-glow-cyan">
+          <Film className="w-7 h-7 text-white" />
+        </div>
+        <p className="text-white font-semibold text-lg">{dict.hero.moviesTitle}</p>
+        <p className="text-brand-text text-sm max-w-xs">{dict.hero.moviesSubtitle}</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="relative flex items-end justify-center gap-3 sm:gap-4">
+        {posters.map((p, i) => (
+          <HeroPoster key={p.id} item={p} featured={i === 1} priority />
+        ))}
+      </div>
+      <div className="relative mt-6 text-center">
+        <p className="text-white font-semibold">{dict.hero.moviesTitle}</p>
+        <p className="text-brand-text text-sm">{dict.hero.moviesSubtitle}</p>
+      </div>
+    </>
+  );
+}
+
+/** Same-dimensions placeholder shown only while the poster cluster streams in. */
+function HeroPostersSkeleton({ dict }: { dict: Dictionary }) {
+  return (
+    <>
+      <div className="relative flex items-end justify-center gap-3 sm:gap-4">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className={`relative w-1/3 ${i === 1 ? "-translate-y-4 sm:-translate-y-6 z-10" : "translate-y-2 opacity-90"}`}>
+            <div
+              className={`relative aspect-[2/3] w-full rounded-xl overflow-hidden border bg-white/5 animate-pulse ${
+                i === 1 ? "border-brand-accent/50" : "border-white/10"
+              }`}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="relative mt-6 text-center">
+        <p className="text-white font-semibold">{dict.hero.moviesTitle}</p>
+        <p className="text-brand-text text-sm">{dict.hero.moviesSubtitle}</p>
+      </div>
+    </>
   );
 }
 

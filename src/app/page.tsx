@@ -5,8 +5,9 @@ import {
   Zap, BookOpen, Trophy, Wallet, Headphones, KeyRound, PlayCircle,
   Sparkles, Film, Cpu, Star, ShieldCheck,
 } from "lucide-react";
+import { Suspense } from "react";
 import { Hero } from "@/components/sections/Hero";
-import { MovieShowcase } from "@/components/sections/MovieShowcase";
+import { MovieShowcase, MovieShowcaseSkeleton } from "@/components/sections/MovieShowcase";
 import { Reviews } from "@/components/sections/Reviews";
 import { FeatureCard } from "@/components/cards/FeatureCard";
 import { PricingCard } from "@/components/cards/PricingCard";
@@ -179,7 +180,9 @@ export default function Home() {
       </section>
 
       {/* 3) Filme & Serien (OMDb, graceful fallback) */}
-      <MovieShowcase />
+      <Suspense fallback={<MovieShowcaseSkeleton />}>
+        <MovieShowcase />
+      </Suspense>
 
       {/* Pricing preview + payment methods */}
       <section className="py-24 bg-brand-dark relative">

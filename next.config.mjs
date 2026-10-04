@@ -23,6 +23,23 @@ const nextConfig = {
       { source: "/pricing", destination: "/preise", permanent: true },
     ];
   },
+  async headers() {
+    return [
+      {
+        // Static images in /public are content-stable (updated by renaming or
+        // cache-busting, never in place), so they are safe to cache long-lived.
+        // Previously they inherited Next's default `max-age=0, must-revalidate`,
+        // which forced a conditional revalidation of every image on every
+        // navigation and language switch. `immutable` removes those round-trips.
+        // NOTE: to replace one of these images later, change its filename (or add
+        // a ?v= query) so browsers pick up the new version.
+        source: "/images/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

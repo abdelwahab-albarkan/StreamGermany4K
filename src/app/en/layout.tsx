@@ -1,6 +1,10 @@
 import React from "react";
-import { HtmlLangHandler } from "@/components/ui/HtmlLangHandler";
 
+/**
+ * Tags the English content subtree with `lang="en-GB"` in the server-rendered
+ * HTML (`display: contents`, so it has no layout effect). The `<html>` element's
+ * runtime lang is kept in sync by the root-level HtmlLangHandler.
+ */
 export default function EnglishLayout({
   children,
 }: {
@@ -8,7 +12,6 @@ export default function EnglishLayout({
 }) {
   return (
     <div lang="en-GB" className="contents">
-      <HtmlLangHandler lang="en-GB" />
       {children}
     </div>
   );

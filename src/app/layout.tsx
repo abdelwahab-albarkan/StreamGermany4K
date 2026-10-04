@@ -7,6 +7,7 @@ import { CookieBanner } from "@/components/ui/CookieBanner";
 import { SITE } from "@/lib/site";
 import { JsonLd, organizationSchema, websiteSchema } from "@/lib/jsonld";
 import { WhatsAppButton } from "@/components/ui/WhatsApp";
+import { HtmlLangHandler } from "@/components/ui/HtmlLangHandler";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -57,6 +58,7 @@ export default function RootLayout({
     <html lang="de">
       <body className={`${inter.variable} font-sans antialiased bg-brand-dark text-white flex flex-col min-h-screen`}>
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <HtmlLangHandler />
         <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />

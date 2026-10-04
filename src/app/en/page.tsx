@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -21,7 +22,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Hero } from "@/components/sections/Hero";
-import { MovieShowcase } from "@/components/sections/MovieShowcase";
+import { MovieShowcase, MovieShowcaseSkeleton } from "@/components/sections/MovieShowcase";
 import { Reviews } from "@/components/sections/Reviews";
 import { FeatureCard } from "@/components/cards/FeatureCard";
 import { PricingCard } from "@/components/cards/PricingCard";
@@ -255,7 +256,9 @@ export default function EnglishHome() {
       </section>
 
       {/* 3) Movies & Series */}
-      <MovieShowcase locale="en" />
+      <Suspense fallback={<MovieShowcaseSkeleton locale="en" />}>
+        <MovieShowcase locale="en" />
+      </Suspense>
 
       {/* Pricing Preview + Payment methods */}
       <section className="py-24 bg-brand-dark relative">
