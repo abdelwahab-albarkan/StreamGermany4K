@@ -128,6 +128,17 @@ export default function KodiAddonsPage() {
             </div>
           </div>
         </div>
+
+        <p className="text-brand-text leading-relaxed max-w-3xl">
+          Wer lieber eine dedizierte IPTV-App nutzt, kann statt Kodi auch{" "}
+          <Link href="/iptv-tivimate" className="text-brand-accent hover:underline">TiviMate</Link>{" "}
+          oder{" "}
+          <Link href="/iptv-smarters-pro" className="text-brand-accent hover:underline">IPTV Smarters Pro</Link>{" "}
+          verwenden. Mehr dazu in der{" "}
+          <Link href="/iptv-apps" className="text-brand-accent hover:underline">IPTV-Apps-Übersicht</Link>; welche
+          Geräte unterstützt werden, zeigt die{" "}
+          <Link href="/geraete" className="text-brand-accent hover:underline">Geräte-Übersicht</Link>.
+        </p>
       </div>
 
       <Faq items={faq} heading="Fragen zu Kodi IPTV" />

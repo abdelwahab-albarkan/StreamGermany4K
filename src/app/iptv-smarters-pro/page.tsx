@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MonitorPlay, CheckCircle2 } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Faq } from "@/components/sections/Faq";
@@ -114,6 +115,17 @@ export default function SmartersProPage() {
             </div>
           </div>
         </div>
+
+        <p className="text-brand-text leading-relaxed max-w-3xl">
+          Neben IPTV Smarters Pro sind auch{" "}
+          <Link href="/iptv-tivimate" className="text-brand-accent hover:underline">TiviMate</Link>{" "}
+          und das{" "}
+          <Link href="/kodi-iptv-addons" className="text-brand-accent hover:underline">Kodi-IPTV-Addon</Link>{" "}
+          beliebte Player. Welche App zu Ihrem Gerät passt, zeigt die{" "}
+          <Link href="/iptv-apps" className="text-brand-accent hover:underline">IPTV-Apps-Übersicht</Link>; eine
+          Liste unterstützter Geräte finden Sie in der{" "}
+          <Link href="/geraete" className="text-brand-accent hover:underline">Geräte-Übersicht</Link>.
+        </p>
       </div>
 
       <Faq items={faq} heading="Fragen zu IPTV Smarters Pro" />

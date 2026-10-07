@@ -120,6 +120,17 @@ export default function TivimatePage() {
             </div>
           </div>
         </div>
+
+        <p className="text-brand-text leading-relaxed max-w-3xl">
+          Als Alternative zu TiviMate eignen sich{" "}
+          <Link href="/iptv-smarters-pro" className="text-brand-accent hover:underline">IPTV Smarters Pro</Link>{" "}
+          oder{" "}
+          <Link href="/kodi-iptv-addons" className="text-brand-accent hover:underline">Kodi mit IPTV-Addon</Link>.
+          Einen Überblick über alle Player bietet die{" "}
+          <Link href="/iptv-apps" className="text-brand-accent hover:underline">IPTV-Apps-Übersicht</Link>, passende
+          Hardware finden Sie in der{" "}
+          <Link href="/geraete" className="text-brand-accent hover:underline">Geräte-Übersicht</Link>.
+        </p>
       </div>
 
       <Faq items={faq} heading="Häufige Fragen zu TiviMate" />
