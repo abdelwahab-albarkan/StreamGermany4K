@@ -19,9 +19,9 @@ import { getPlans } from "@/lib/pricing";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "IPTV in Deutschland – Premium 4K Streaming",
+  title: "Bester IPTV Anbieter Deutschland 2026 – Premium 4K Streaming",
   description:
-    "StreamGermany4K ist Ihr Premium-IPTV-Dienst für Deutschland: Live-TV, Sport und Filme in 4K/HD auf Smart-TV, Fire TV Stick, Handy und mehr. Anbieter vergleichen, Preise verstehen und einfach starten.",
+    "StreamGermany4K ist Ihr bester IPTV-Anbieter in Deutschland: 4K Live-TV, Bundesliga, Filme & Serien auf Smart-TV & Fire TV Stick. 3-Stunden-Test per WhatsApp starten!",
   path: "/",
 });
 

@@ -76,3 +76,30 @@ export function faqSchema(qa: { q: string; a: string }[]) {
     })),
   };
 }
+
+export function serviceSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "StreamGermany4K IPTV Service",
+    serviceType: "IPTV Streaming Service",
+    provider: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.domain,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Germany",
+    },
+    description:
+      "Premium IPTV Streaming für Deutschland mit 4K/HD Live-TV, Sport, Filmen und Serien auf Smart-TV und Fire TV Stick.",
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "EUR",
+      lowPrice: "14.99",
+      highPrice: "79.99",
+      offerCount: "4",
+    },
+  };
+}

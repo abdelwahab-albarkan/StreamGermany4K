@@ -40,6 +40,8 @@ const INDEXABLE_ROUTES: RouteMapping[] = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
 
+  const today = new Date().toISOString().split("T")[0];
+
   for (const route of INDEXABLE_ROUTES) {
     const deUrl = new URL(route.de, SITE.domain).toString();
     const enUrl = new URL(route.en, SITE.domain).toString();
@@ -47,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // German Entry
     entries.push({
       url: deUrl,
-      lastModified: "2026-09-09",
+      lastModified: today,
       changeFrequency: route.changeFrequency,
       priority: route.priority,
       alternates: {
@@ -62,7 +64,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // English Entry
     entries.push({
       url: enUrl,
-      lastModified: "2026-09-09",
+      lastModified: today,
       changeFrequency: route.changeFrequency,
       priority: route.priority,
       alternates: {

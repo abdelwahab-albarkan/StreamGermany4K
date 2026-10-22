@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CookieBanner } from "@/components/ui/CookieBanner";
 import { SITE } from "@/lib/site";
-import { JsonLd, organizationSchema, websiteSchema } from "@/lib/jsonld";
+import { JsonLd, organizationSchema, websiteSchema, serviceSchema } from "@/lib/jsonld";
 import { WhatsAppButton } from "@/components/ui/WhatsApp";
 import { HtmlLangHandler } from "@/components/ui/HtmlLangHandler";
 
@@ -14,11 +14,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.domain),
   title: {
-    default: "IPTV in Deutschland – Premium 4K Streaming | StreamGermany4K",
+    default: "Bester IPTV Anbieter Deutschland 2026 – Premium 4K Streaming | StreamGermany4K",
     template: "%s | StreamGermany4K",
   },
   description:
-    "StreamGermany4K ist Ihr Premium-IPTV-Dienst für Deutschland: Live-TV, Sport und Filme in 4K/HD auf allen Geräten. Anbieter vergleichen, Abo verstehen und kaufen.",
+    "StreamGermany4K ist Ihr führender IPTV-Anbieter für Deutschland: Live-TV, Bundesliga, Filme & Serien in 4K/HD auf allen Geräten. Jetzt testen und flexibel starten.",
   applicationName: SITE.name,
   alternates: {
     canonical: "/",
@@ -57,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body className={`${inter.variable} font-sans antialiased bg-brand-dark text-white flex flex-col min-h-screen`}>
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        <JsonLd data={[organizationSchema(), websiteSchema(), serviceSchema()]} />
         <HtmlLangHandler />
         <Navbar />
         <main className="flex-grow">{children}</main>
